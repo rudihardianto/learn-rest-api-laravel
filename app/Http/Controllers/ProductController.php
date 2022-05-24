@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductSingleResource;
-use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -18,13 +17,7 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        if ($request->price < 10000) {
-            throw ValidationException::withMessages([
-                'price' => ['The price must be greater than 10000'],
-            ]);
-        }
-
-        $product = Product::create($request->all());
+        $product = Product::create($request->toArray());
 
         return response()->json([
             'message' => 'Product created successfully',
@@ -37,9 +30,18 @@ class ProductController extends Controller
         return new ProductSingleResource($product);
     }
 
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        $attributes         = $request->toArray();
+        $attributes['slug'] = strtolower(Str::slug($request->name . '-' . Str::random(5)));
+
+        // $product->update($request->toArray());
+        $product->update($attributes);
+
+        return response()->json([
+            'message' => 'Product updated successfully',
+            'product' => new ProductSingleResource($product),
+        ]);
     }
 
     public function destroy(Product $product)
