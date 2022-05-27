@@ -10,6 +10,11 @@ use App\Http\Resources\ProductSingleResource;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except('index', 'show');
+    }
+
     public function index()
     {
         return ProductResource::collection(Product::paginate(15));
