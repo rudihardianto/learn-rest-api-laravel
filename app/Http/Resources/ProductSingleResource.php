@@ -17,6 +17,7 @@ class ProductSingleResource extends JsonResource
             'description'  => $this->description,
             'created'      => $this->created_at->format('d M Y'),
             'updated'      => $this->updated_at->format('d M Y'),
+            'category'     => $this->category->name,
         ];
     }
 }
