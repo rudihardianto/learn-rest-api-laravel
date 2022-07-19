@@ -27,7 +27,7 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Product created successfully',
-            'product' => new ProductSingleResource($product),
+            'data'    => new ProductSingleResource($product),
         ]);
     }
 
@@ -47,7 +47,7 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Product updated successfully',
-            'product' => new ProductSingleResource($product),
+            'data'    => new ProductSingleResource($product),
         ]);
     }
 
